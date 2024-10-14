@@ -9,15 +9,15 @@ sbit RS = P3 ^ 5;
 sbit RW = P3 ^ 6;
 sbit EN = P3 ^ 4;
 sbit cc = P2 ^ 3;
-sbit DS = P2 ^ 2;	// DS18B20µ¥×ÜÏß
-sbit key1 = P3 ^ 0; // ¿ª¹Ø0
-sbit key2 = P3 ^ 1; // ¿ª¹Ø1
-sbit key3 = P3 ^ 2; // ¿ª¹Ø2
-sbit key4 = P3 ^ 3; // ¿ª¹Ø3
+sbit DS = P2 ^ 2;	// DS18B20å•æ€»çº¿
+sbit key1 = P3 ^ 0; // å¼€å…³0
+sbit key2 = P3 ^ 1; // å¼€å…³1
+sbit key3 = P3 ^ 2; // å¼€å…³2
+sbit key4 = P3 ^ 3; // å¼€å…³3
 /*====================================
-º¯Êı£ºvoid Delay_Ms(INT16U ms)
-²ÎÊı£ºms£¬ºÁÃëÑÓÊ±ĞÎ²Î
-ÃèÊö£º12T 51µ¥Æ¬»ú×ÔÊÊÓ¦Ö÷Ê±ÖÓºÁÃë¼¶ÑÓÊ±º¯Êı
+å‡½æ•°ï¼švoid Delay_Ms(INT16U ms)
+å‚æ•°ï¼šmsï¼Œæ¯«ç§’å»¶æ—¶å½¢å‚
+æè¿°ï¼š12T 51å•ç‰‡æœºè‡ªé€‚åº”ä¸»æ—¶é’Ÿæ¯«ç§’çº§å»¶æ—¶å‡½æ•°
 ====================================*/
 void Delay_Ms(INT16U ms)
 {
@@ -30,23 +30,23 @@ void Delay_Ms(INT16U ms)
 	} while (--ms);
 }
 
-/*usÑÓÊ±º¯Êı£¬Ö´ĞĞÒ»´ÎUS--ËùĞè6.5us½øÈëÒ»´Îº¯ÊıĞèÒª11.95us*/
+/*uså»¶æ—¶å‡½æ•°ï¼Œæ‰§è¡Œä¸€æ¬¡US--æ‰€éœ€6.5usè¿›å…¥ä¸€æ¬¡å‡½æ•°éœ€è¦11.95us*/
 void Delay_us(uchar us)
 {
 	while (us--)
 		;
 }
 
-/*µ¥×ÜÏß³õÊ¼»¯Ê±Ğò*/
+/*å•æ€»çº¿åˆå§‹åŒ–æ—¶åº*/
 bit ds_init()
 {
 	bit i;
 	DS = 1;
 	_nop_();
 	DS = 0;
-	Delay_us(75); // À­µÍ×ÜÏß499.45us ¹Ò½ÓÔÚ×ÜÏßÉÏµÄ18B20½«»áÈ«²¿±»¸´Î»
-	DS = 1;		  // ÊÍ·Å×ÜÏß
-	Delay_us(4);  // ÑÓÊ±37.95us µÈ´ı18B20·¢»Ø´æÔÚĞÅºÅ
+	Delay_us(75); // æ‹‰ä½æ€»çº¿499.45us æŒ‚æ¥åœ¨æ€»çº¿ä¸Šçš„18B20å°†ä¼šå…¨éƒ¨è¢«å¤ä½
+	DS = 1;		  // é‡Šæ”¾æ€»çº¿
+	Delay_us(4);  // å»¶æ—¶37.95us ç­‰å¾…18B20å‘å›å­˜åœ¨ä¿¡å·
 	i = DS;
 	Delay_us(20); // 141.95us
 	DS = 1;
@@ -54,17 +54,17 @@ bit ds_init()
 	return (i);
 }
 
-/*Ğ´Ò»¸ö×Ö½Ú*/
+/*å†™ä¸€ä¸ªå­—èŠ‚*/
 void write_byte(uchar dat)
 {
 	uchar i;
 	for (i = 0; i < 8; i++)
 	{
 		DS = 0;
-		_nop_(); // ²úÉúĞ©Ê±Ğò
+		_nop_(); // äº§ç”Ÿäº›æ—¶åº
 		DS = dat & 0x01;
 		Delay_us(10); // 76.95us
-		DS = 1;		  // ÊÍ·Å×ÜÏß×¼±¸ÏÂÒ»´ÎÊı¾İĞ´Èë
+		DS = 1;		  // é‡Šæ”¾æ€»çº¿å‡†å¤‡ä¸‹ä¸€æ¬¡æ•°æ®å†™å…¥
 		_nop_();
 		dat >>= 1;
 	}
@@ -76,9 +76,9 @@ uchar read_byte()
 	for (i = 0; i < 8; i++)
 	{
 		DS = 0;
-		_nop_(); // ²úÉú¶ÁÊ±Ğò
+		_nop_(); // äº§ç”Ÿè¯»æ—¶åº
 		DS = 1;
-		_nop_(); // ÊÍ·Å×ÜÏß
+		_nop_(); // é‡Šæ”¾æ€»çº¿
 		j = DS;
 		Delay_us(10); // 76.95us
 		DS = 1;
@@ -132,7 +132,7 @@ void timer0inte1()
 	TR0 = 1;
 	TMOD = 0X01;
 	TH0 = 0x00;
-	TL0 = 0x00; // ¶¨Ê±15ms
+	TL0 = 0x00; // å®šæ—¶15ms
 	P1 = 0xff;
 }
 void timer1inte1()
@@ -153,15 +153,15 @@ void main()
 	uchar L, M, HT, LT, HT1, HT2, LT1, LT2, A;
 	HT = 30;
 	LT = 15;
-	timer0inte1();	  // ³õÊ¼»¯¶¨Ê±Æ÷
-	ds_init();		  // ³õÊ¼»¯DS18B20
-	write_byte(0xcc); // ·¢ËÍÌøÔ¾ROMÖ¸Áî
-	write_byte(0x4e); // Ğ´Ôİ´æÆ÷Ö¸Áî
+	timer0inte1();	  // åˆå§‹åŒ–å®šæ—¶å™¨
+	ds_init();		  // åˆå§‹åŒ–DS18B20
+	write_byte(0xcc); // å‘é€è·³è·ƒROMæŒ‡ä»¤
+	write_byte(0x4e); // å†™æš‚å­˜å™¨æŒ‡ä»¤
 	write_byte(0x7f);
 	write_byte(0xf7);
-	write_byte(0x1f); // ÅäÖÃ¹¤×÷ÔÚ9Î»Ä£Ê½ÏÂ
-	ds_init();		  // ³õÊ¼»¯DS18B20
-	write_byte(0xcc); // ·¢ËÍÌøÔ¾ROMÖ¸Áî
+	write_byte(0x1f); // é…ç½®å·¥ä½œåœ¨9ä½æ¨¡å¼ä¸‹
+	ds_init();		  // åˆå§‹åŒ–DS18B20
+	write_byte(0xcc); // å‘é€è·³è·ƒROMæŒ‡ä»¤
 	write_byte(0x48);
 
 	read_wait();
@@ -171,12 +171,12 @@ void main()
 	//	write_zl(0x01);
 	while (1)
 	{
-		ds_init();		  // ³õÊ¼»¯DS18B20
-		write_byte(0xcc); // ·¢ËÍÌøÔ¾ROMÖ¸Áî
-		write_byte(0x44); // ·¢ËÍÎÂ¶È×ª»»Ö¸Áî
-		ds_init();		  // ³õÊ¼»¯DS18B20
-		write_byte(0xcc); // ·¢ËÍÌøÔ¾ROMÖ¸Áî
-		write_byte(0xbe); // ¶ÁÈ¡DS18B20Ôİ´æÆ÷Öµ
+		ds_init();		  // åˆå§‹åŒ–DS18B20
+		write_byte(0xcc); // å‘é€è·³è·ƒROMæŒ‡ä»¤
+		write_byte(0x44); // å‘é€æ¸©åº¦è½¬æ¢æŒ‡ä»¤
+		ds_init();		  // åˆå§‹åŒ–DS18B20
+		write_byte(0xcc); // å‘é€è·³è·ƒROMæŒ‡ä»¤
+		write_byte(0xbe); // è¯»å–DS18B20æš‚å­˜å™¨å€¼
 		L = read_byte();
 		M = read_byte();
 		i = M;
@@ -196,24 +196,24 @@ void main()
 		write_zl(0x01);
 		write_sj(a + '0');
 		write_sj(b + '0');
-		write_sj(0x2e); // ·ûºÅ.
+		write_sj(0x2e); // ç¬¦å·.
 		write_sj(c + '0');
-		write_sj(0xdf); // ·ûºÅ¡ã
+		write_sj(0xdf); // ç¬¦å·Â°
 
-		write_zl(0x80 + 0x0D); // Ö¸Õë
+		write_zl(0x80 + 0x0D); // æŒ‡é’ˆ
 		write_sj(HT1 + '0');
 		write_sj(HT2 + '0');
-		write_sj(0xdf); // ·ûºÅ¡ã
+		write_sj(0xdf); // ç¬¦å·Â°
 
-		write_zl(0x80 + 0x4D); // Ö¸Õë
+		write_zl(0x80 + 0x4D); // æŒ‡é’ˆ
 		write_sj(LT1 + '0');
 		write_sj(LT2 + '0');
-		write_sj(0xdf); // ·ûºÅ
+		write_sj(0xdf); // ç¬¦å·
 
-		//	write_zl(0x80+0x0e);//Ö¸Õë
+		//	write_zl(0x80+0x0e);//æŒ‡é’ˆ
 		//	write_zl(0xf);
 
-		/*Èç¹ûµÍÎÂ¸ßÓÚ¸ß,Ôòµ÷»»ÊıÖµ*/
+		/*å¦‚æœä½æ¸©é«˜äºé«˜,åˆ™è°ƒæ¢æ•°å€¼*/
 		if (LT > HT)
 		{
 			A = LT;
@@ -232,43 +232,43 @@ void main()
 			cc = 1;
 		}
 		
-		/*¿ª¹Ø°´ÏÂ,ÊıÖµÎª0*/
+		/*å¼€å…³æŒ‰ä¸‹,æ•°å€¼ä¸º0*/
 		if (key1 == 0)
 		{
-			Delay_Ms(20); //·À¶¶¶¯
+			Delay_Ms(20); //é˜²æŠ–åŠ¨
 			if (key1 == 0)
 			{
-				HT++;//hight temperatureÉı¸ß1¶È
+				HT++;//hight temperatureå‡é«˜1åº¦
 				while (!key1)
 					;
 			}
 		}
 		if (key2 == 0)
 		{
-			Delay_Ms(20);//·À¶¶¶¯
+			Delay_Ms(20);//é˜²æŠ–åŠ¨
 			if (key2 == 0)
 			{
-				HT--;//hight temperature½µµÍ1¶È
+				HT--;//hight temperatureé™ä½1åº¦
 				while (!key2)
 					;
 			}
 		}
 		if (key3 == 0)
 		{
-			Delay_Ms(20);//·À¶¶¶¯
+			Delay_Ms(20);//é˜²æŠ–åŠ¨
 			if (key3 == 0)
 			{
-				LT++;//low temperature½µµÍ1¶È
+				LT++;//low temperatureé™ä½1åº¦
 				while (!key3)
 					;
 			}
 		}
 		if (key4 == 0)
 		{
-			Delay_Ms(20);//·À¶¶¶¯
+			Delay_Ms(20);//é˜²æŠ–åŠ¨
 			if (key4 == 0)
 			{
-				LT--;//low temperature½µµÍ1¶È
+				LT--;//low temperatureé™ä½1åº¦
 				while (!key4)
 					;
 			}
@@ -279,7 +279,7 @@ void main()
 void timer0() interrupt 1
 {
 	TH0 = 0x00;
-	TL0 = 0x00; // ¶¨Ê±15ms
+	TL0 = 0x00; // å®šæ—¶15ms
 	P1 = ~P1;
 	cc = ~cc;
 }
